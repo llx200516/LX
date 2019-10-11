@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.schj.mapper.CompanyMapper">
+	
+	
+	
+	<insert id="inserComI">
+		insert into company 
+			(
+			comName, 
+			comscale, 
+			comAddress, 
+			involved
+			)
+			values
+			(
+			#{company.comName}, 
+			#{company.comscale},
+			#{company.comAddress}, 
+			#{company.involved}
+			)
+	</insert>
+	
+	
+	
+	<update id="modiComM">
+			update world.company 
+				set
+				<if test="company.comName!=null">
+					comName = #{company.comName} ,
+				</if>
+				<if test="company.comscale!=null">
+					comscale = #{company.comscale} ,
+				</if>
+				<if test="company.comAddress!=null">
+					comAddress = #{company.comAddress},
+				</if>
+				<if test="company.involved!=null">
+					involved = #{company.involved}
+				</if>
+				where
+				id = #{company.id}
+		
+	</update>
+	
+	
+	<delete id="delComD">
+		delete from company  where id = #{comid}
+	</delete>
+	
+	
+</mapper>

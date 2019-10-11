@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.schj.mapper.MemberMapper">
+	
+	
+	<insert id="MemInset">
+		insert into member 
+				(name, phone, awork)
+			values
+				(#{member.name}, #{member.phone}, #{member.awork})
+	</insert>
+	
+	<update id="MemModi">
+		update member 
+			set
+				<if test="member.phone!=null">
+					phone = #{member.phone}, 
+				</if>
+				<if test="member.awork!=null">
+					awork = #{member.awork}
+				</if>
+			where
+				id = #{member.id}
+	</update>
+	
+	<delete id="MemDelet">
+		delete from member 
+			where
+				id = #{member.id}
+	</delete>
+</mapper>

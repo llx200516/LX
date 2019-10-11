@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.schj.mapper.RecordMapper">
+	
+	
+	<select id="checkRecByMidPosId" resultType="com.schj.entity.Record">
+	
+		select 	id,memid,resid,posid,sendtime,result from record rec where rec.memid=#{memid} and rec.posid=#{posid} 
+		
+	</select>
+	
+	<insert id="Icord">
+		insert into record 
+			(
+			memid, 
+			resid, 
+			posid, 
+			sendtime, 
+			result
+			)
+			values
+			(#{record.memid}, 
+			#{record.resid}, 
+			#{record.posid}, 
+			#{record.sendtime}, 
+			#{record.result}
+			)
+	</insert>
+	
+	<update id="RecresultModi">
+		
+		update record rd set  result = #{record.result} where id = #{record.id} and rd.memid=#{record.memid} and rd.posid=#{record.posid}
+		
+	</update>
+	
+	<resultMap id="AllcmprrL" type="com.schj.entity.Record">
+			<id property="id" column="id" ></id>
+			<result property="sendtime" column="sendtime"></result>
+			<result property="memid" column="memid"></result>
+			<result property="resid" column="resid"></result>
+			<result property="posid" column="posid"></result>
+			<result property="result" column="result"></result>
+				<collection property="resume" ofType="com.schj.entity.Resume" column="resid">
+		            <id property="id" column="id"/>    
+		            <result property="memid" column="memid"/>
+		            <result property="intention" column="intention"/> 
+		            <result property="pectsalary" column="pectsalary"/> 
+		            <result property="loffice" column="loffice"/> 
+		            <result property="sappraisal" column="sappraisal"/> 
+	        	</collection>
+	        	<collection property="member" ofType="com.schj.entity.Member" column="memid">
+		            <id property="id" column="id"/>    
+		            <result property="name" column="name"/>
+		            <result property="phone" column="phone"/> 
+		            <result property="awork" column="awork"/> 
+	        	</collection>
+	        	<collection property="position" ofType="com.schj.entity.Position" column="posid">
+		            <id property="id" column="id"/>    
+		            <result property="posName" column="posName"/>
+		            <result property="comid" column="comid"/> 
+		            <result property="salary" column="salary"/> 
+		            <result property="comBusiness" column="comBusiness"/>
+		            <result property="awork" column="awork"/> 
+		            <result property="education" column="education"/> 
+		            <result property="recnumber" column="recnumber"/>
+		            <result property="redate" column="redate"/> 
+			            <association property="company" javaType="com.schj.entity.Company">  
+			            	<id column="comid" property="id"/>  
+		           		 	<result column="comName" property="comName"/>       
+		           		 	<result column="comscale" property="comscale"/>    
+		           		 	<result column="comAddress" property="comAddress"/>    
+		           		 	<result column="involved" property="involved"/>    
+	        			</association>
+	        	</collection>
+	</resultMap>
+	
+	<select id="seleAllr" resultMap="AllcmprrL">
+		select * from record re,resume res,member mem,position pos,company com where re.resid=res.id and re.memid=mem.id and re.posid=pos.id and com.id=pos.comId
+		and pos.posName=#{posName} and com.comName=#{comName}
+	</select>
+	
+	<select id="reexcel" resultMap="AllcmprrL">
+		select * from record re,resume res,member mem,position pos,company com where re.resid=res.id and re.memid=mem.id and re.posid=pos.id and com.id=pos.comId
+	</select>
+	
+	
+	<select id="toudisum" resultType="java.lang.Integer">
+		select COUNT(re.result) from record re,resume res,member mem,position pos,company com
+			where re.resid=res.id and re.memid=mem.id and re.posid=pos.id and com.id=pos.comId
+				and pos.posName=#{posName} and com.comName=#{comName} and re.result=0
+	</select>
+	
+	<select id="mianssum" resultType="java.lang.Integer">
+		select COUNT(re.result) from record re,resume res,member mem,position pos,company com
+			where re.resid=res.id and re.memid=mem.id and re.posid=pos.id and com.id=pos.comId
+				and pos.posName=#{posName} and com.comName=#{comName} and re.result=1
+	</select>
+	
+	<select id="tonggsum" resultType="java.lang.Integer">
+		select COUNT(re.result) from record re,resume res,member mem,position pos,company com
+			where re.resid=res.id and re.memid=mem.id and re.posid=pos.id and com.id=pos.comId
+				and pos.posName=#{posName} and com.comName=#{comName} and re.result=2
+	</select>
+	
+	
+</mapper>

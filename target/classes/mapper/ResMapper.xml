@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.schj.mapper.ResumeMapper">
+	
+	<select id="findResIdByMemidI" resultType="com.schj.entity.Resume">
+		select 	id, memid, intention, pectsalary, loffice, sappraisal from resume res where res.memid=#{memid} and res.intention=#{intention} 
+	</select>
+	
+	
+	<insert id="inserRes">
+		insert into world.resume 
+			(memid, 
+			intention, 
+			pectsalary, 
+			loffice, 
+			sappraisal
+			)
+			values
+			(#{resume.memid}, 
+			#{resume.intention}, 
+			#{resume.pectsalary}, 
+			#{resume.loffice}, 
+			#{resume.sappraisal}
+			)
+	</insert>
+	
+	<update id="updatRes">
+		update resume 
+			set
+			<if test="resume.intention!=null">
+				intention = #{resume.intention}, 
+			</if>
+			<if test="resume.pectsalary!=null">
+				pectsalary = #{resume.pectsalary}, 
+			</if>
+			<if test="resume.loffice!=null">
+				loffice = #{resume.loffice}, 
+			</if>
+			<if test="resume.sappraisal!=null">
+				sappraisal = #{resume.sappraisal}
+			</if>
+			where
+			id = #{resume.id}
+	</update>
+	
+	<delete id="deleRes">
+		delete from resume 
+			where
+			id = #{resume.id} ;
+	</delete>
+	
+	
+</mapper>

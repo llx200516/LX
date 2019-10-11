@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.schj.mapper.PositionMapper" >
+	
+	
+	<!-- 查询所有职位表信息 -->
+    <select id="selectByAllPos"  resultType="com.schj.entity.Position" >
+        select * from  position
+    </select>
+    <!-- 分页查询职位表信息 -->
+    
+    
+    <select id="selectPosPage"  resultType="com.schj.entity.Position" >
+        select * from  position
+    </select>
+    
+    <!-- 根据检索条件查职位信息 -->
+    <select id="selectByWh" resultType="com.schj.entity.Position">
+    	select * from  position
+    	<where>
+    		<if test="posName!=null">
+    		 	and  posName like concat('%',#{posName},'%')
+    		</if>
+    		<if test="Education!=null">
+    			 and Education=#{Education}
+    		</if>
+    		<if test="comBusiness!=null">
+    			and comBusiness=#{comBusiness}
+    		</if>
+    	</where>
+    </select>
+    <!-- 维护职位信息 -->
+    <insert id="insertPos">
+    	insert into position 
+			(
+			posName, 
+			comId, 
+			salary, 
+			comBusiness, 
+			Awork, 
+			Education, 
+			recnumber, 
+			redate
+			)
+			values(
+			#{position.posName}, 
+			#{position.comid}, 
+			#{position.salary}, 
+			#{position.comBusiness}, 
+			#{position.awork}, 
+			#{position.education}, 
+			#{position.recnumber}, 
+			#{position.redate}
+			)
+    </insert>
+    <!-- 删除职位信息 -->
+    <delete id="delectPos">
+    	delete from position where id = #{posid} ;
+    </delete>
+    
+    <!-- 修改职位信息 -->
+    <update id="updatPos">
+		update world.position 
+			set
+			<if test="position.posName!=null">
+				posName = #{position.posName}, 
+			</if>
+			<if test="position.salary!=null">
+				salary = #{position.salary},
+			</if>
+			<if test="position.comBusiness!=null">
+				comBusiness = #{position.comBusiness},
+			</if>
+			<if test="position.awork!=null">
+				Awork = #{position.awork}, 
+			</if>
+			<if test="position.education!=null">
+				Education = #{position.education},
+			</if>
+			<if test="position.recnumber">
+				recnumber = #{position.recnumber}
+			</if>
+			where
+			id = #{position.id};
+    </update>
+    
+    
+    <!-- 公司职位条件检索查询 已完成全部查询，包括分页 -->
+    	<resultMap id="poscom" type="com.schj.entity.Position">
+      			    <id property="id" column="id"></id>
+				 	<result property="posName" column="posName"></result>
+				 	<result property="comid" column="comid"></result>
+				 	<result property="salary" column="salary"></result>
+				 	<result property="comBusiness" column="comBusiness"></result>
+				 	<result property="awork" column="awork"></result>
+				 	<result property="education" column="education"></result>
+				 	<result property="recnumber" column="recnumber"></result>
+				 	<result property="redate" column="redate"></result>
+			 	<association property="company" javaType="com.schj.entity.Company">  
+		            	<id column="comid" property="id"/>  
+	           		 	<result column="comName" property="comName"/>       
+	           		 	<result column="comscale" property="comscale"/>    
+	           		 	<result column="comAddress" property="comAddress"/>    
+	           		 	<result column="involved" property="involved"/>    
+        		</association> 
+		 </resultMap>
+	
+		 <select id="posComLh" resultMap="poscom">
+		 	select * from position p,company c 
+		 	<where>
+		 		c.id=p.comId
+		 		<if test="comName!=null">
+    		 		and  c.comName = #{comName}
+	    		</if>
+	    		<if test="position.posName!=null">
+	    			 and p.posName=#{position.posName}
+	    		</if>
+	    		<if test="position.salary!=null">
+	    			and p.salary=#{position.salary}
+	    		</if>
+	    		<if test="position.education!=null">
+	    			and p.Education=#{position.education}
+	    		</if>
+		 	</where>
+		 </select>
+		 
+		 
+		 <select id="selectPosidByComName" resultType="com.schj.entity.Position">
+			select 	id,posName,comId,salary,comBusiness,Awork,Education,recnumber,redate from position p where p.posName=#{posName}
+		</select>
+		
+		
+		<update id="recuMberByid">
+			update position set recnumber = #{recnumber}  where id = #{id}
+		</update>
+		
+		<select id="resultById"  resultType="com.schj.entity.Position" >
+        	select * from  position ps where ps.id=#{id}
+   		 </select>
+    
+</mapper>
